@@ -3,7 +3,7 @@ from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 
 # from app.api.chat import chat_router, tasks_router
-from app.utils.loggers import setup_logging
+from fastapi_api.app.utils.logger import setup_logging
 
 
 # Создаём приложение FastAPI
