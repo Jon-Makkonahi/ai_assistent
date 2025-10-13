@@ -6,9 +6,10 @@ from sqlalchemy.future import select
 from app.utils.logger import logger, log_id_filter
 from app.db.models import Task, TaskStatus
 from app.db.database import async_session_maker
+from app.core.config import URL_REDIS
 
 
-celery_app = Celery("ai_assistant", broker="redis://localhost:6379/0")
+celery_app = Celery("ai_assistant", broker=URL_REDIS)
 
 
 @celery_app.task

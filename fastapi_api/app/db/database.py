@@ -37,9 +37,8 @@ async def init_db(app: FastAPI) -> None:
         logger.info("Инициализация подключения к базе данных...")
         app.state.db_session_maker = async_session_maker
         async with async_engine.connect() as conn:
-            await conn.run_sync(Base.metadata.create_all)
-        app.state.db_status = "connected"
-        logger.info("Соединение с базой данных успешно установлено")
+            app.state.db_status = "connected"
+            logger.info("Соединение с базой данных успешно установлено")
     except Exception as e:
         app.state.db_status = f"error: {str(e)}"
         logger.error(f"Не удалось подключиться к базе данных: {e}")

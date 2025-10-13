@@ -115,7 +115,7 @@ async def get_task_status(task_id: str, db: AsyncSession = Depends(get_async_db)
         log_id_filter.log_id = None
 
 
-@chat_router.get("/messages/{user_id}", response_model=List[MessageResponse])
+@messages_router.get("/messages/{user_id}", response_model=List[MessageResponse])
 async def get_user_messages(user_id: int, db: AsyncSession = Depends(get_async_db)):
     """
     Получает историю сообщений пользователя.

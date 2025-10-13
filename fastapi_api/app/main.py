@@ -72,9 +72,6 @@ async def log_middleware(request: Request, call_next):
         log_id_filter.log_id = None
 
 
-root_router = APIRouter(prefix="", tags=["root"])
-
-
 # Корневой эндпоинт для проверки
 @app.get("/")
 async def root(request: Request) -> Dict[str, Union[str, Dict[str, str], None]]:
@@ -98,7 +95,6 @@ async def root(request: Request) -> Dict[str, Union[str, Dict[str, str], None]]:
 
 
 # вложение и подключение
-root_router.include_router(chat_router, prefix="/api")
-root_router.include_router(tasks_router, prefix="/api")
-root_router.include_router(messages_router, prefix="/api")
-app.include_router(root_router)
+app.include_router(chat_router)
+app.include_router(tasks_router)
+app.include_router(messages_router)
