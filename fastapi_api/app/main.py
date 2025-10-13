@@ -8,8 +8,8 @@ from fastapi import FastAPI, APIRouter, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.db.database import init_db, close_db, async_engine
-# from app.api.chat import chat_router, tasks_router
+from app.db.database import init_db, close_db
+from app.api.chat import chat_router, tasks_router, messages_router
 from app.utils.logger import log_id_filter, logger
 
 
@@ -98,6 +98,7 @@ async def root(request: Request) -> Dict[str, Union[str, Dict[str, str], None]]:
 
 
 # вложение и подключение
-# root_router.include_router(chat_router, prefix="/api")
-# root_router.include_router(tasks_router, prefix="/api")
+root_router.include_router(chat_router, prefix="/api")
+root_router.include_router(tasks_router, prefix="/api")
+root_router.include_router(messages_router, prefix="/api")
 app.include_router(root_router)

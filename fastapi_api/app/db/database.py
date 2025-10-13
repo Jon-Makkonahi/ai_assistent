@@ -7,10 +7,11 @@ from loguru import logger
 from sqlalchemy.ext.asyncio import (create_async_engine, async_sessionmaker,
                                     AsyncSession)
 
+from app.core.config import DATABASE_URL
 from app.utils.logger import log_id_filter, logger
+from app.db.models import Base
 
 
-DATABASE_URL = "postgresql+asyncpg://user_project:admin123@localhost:5432/project_db"
 async_engine = create_async_engine(DATABASE_URL, echo=True)
 async_session_maker = async_sessionmaker(
     async_engine, expire_on_commit=False, class_=AsyncSession
@@ -36,8 +37,9 @@ async def init_db(app: FastAPI) -> None:
         logger.info("Инициализация подключения к базе данных...")
         app.state.db_session_maker = async_session_maker
         async with async_engine.connect() as conn:
-            app.state.db_status = "connected"
-            logger.info("Соединение с базой данных успешно установлено")
+            await conn.run_sync(Base.metadata.create_all)
+        app.state.db_status = "connected"
+        logger.info("Соединение с базой данных успешно установлено")
     except Exception as e:
         app.state.db_status = f"error: {str(e)}"
         logger.error(f"Не удалось подключиться к базе данных: {e}")
