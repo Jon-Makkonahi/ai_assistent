@@ -33,17 +33,18 @@ async def init_db(app: FastAPI) -> None:
     log_id = str(uuid4())
     log_id_filter.log_id = log_id
     try:
-        logger.info("🔄 Инициализация подключения к базе данных...")
+        logger.info("Инициализация подключения к базе данных...")
         app.state.db_session_maker = async_session_maker
         async with async_engine.connect() as conn:
             app.state.db_status = "connected"
-            logger.info("✅ Соединение с базой данных успешно установлено")
+            logger.info("Соединение с базой данных успешно установлено")
     except Exception as e:
         app.state.db_status = f"error: {str(e)}"
-        logger.error(f"❌ Не удалось подключиться к базе данных: {e}")
+        logger.error(f"Не удалось подключиться к базе данных: {e}")
         raise
     finally:
         log_id_filter.log_id = None
+
 
 async def close_db(app: FastAPI) -> None:
     """
@@ -52,11 +53,11 @@ async def close_db(app: FastAPI) -> None:
     log_id = str(uuid4())
     log_id_filter.log_id = log_id
     try:
-        logger.info("🛑 Закрытие соединений с базой данных...")
+        logger.info("Закрытие соединений с базой данных...")
         if hasattr(app.state, "db_session_maker"):
             await async_engine.dispose()
             app.state.db_session_maker = None
             app.state.db_status = "disconnected"
-            logger.info("✅ Соединения с базой данных успешно закрыты")
+            logger.info("Соединения с базой данных успешно закрыты")
     finally:
         log_id_filter.log_id = None

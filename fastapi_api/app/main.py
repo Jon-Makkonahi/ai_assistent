@@ -19,22 +19,22 @@ async def lifespan(app: FastAPI):
     log_id = str(uuid4())
     log_id_filter.log_id = log_id
     try:
-        logger.info("🔄 Приложение запускается: инициализация ресурсов...")
+        logger.info("Приложение запускается: инициализация ресурсов...")
         await init_db(app)
         ml_model = {"name": "SentimentAnalysisModel", "version": "1.0"}
-        logger.info(f"✅ Модель ML загружена: {ml_model}")
+        logger.info(f"Модель ML загружена: {ml_model}")
         app.state.model = ml_model
         yield
     except Exception as e:
-        logger.error(f"❌ Ошибка при запуске приложения: {e}")
+        logger.error(f"Ошибка при запуске приложения: {e}")
         raise
     finally:
-        logger.info("🛑 Приложение останавливается: очистка ресурсов...")
+        logger.info("Приложение останавливается: очистка ресурсов...")
         await close_db(app)
         if hasattr(app.state, "model"):
-            logger.info("🔻 Выгрузка модели ML")
+            logger.info("Выгрузка модели ML")
             app.state.model = None
-        logger.info("✅ Ресурсы успешно очищены.")
+        logger.info("Ресурсы успешно очищены.")
         log_id_filter.log_id = None
 
 # Создаём приложение FastAPI
