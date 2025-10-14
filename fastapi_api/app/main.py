@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.db.database import init_db, close_db
 from app.api.chat import chat_router, tasks_router, messages_router
+from app.api.users import users_router
 from app.utils.logger import log_id_filter, logger
 
 
@@ -98,3 +99,4 @@ async def root(request: Request) -> Dict[str, Union[str, Dict[str, str], None]]:
 app.include_router(chat_router)
 app.include_router(tasks_router)
 app.include_router(messages_router)
+app.include_router(users_router)

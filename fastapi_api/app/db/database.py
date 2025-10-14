@@ -9,7 +9,6 @@ from sqlalchemy.ext.asyncio import (create_async_engine, async_sessionmaker,
 
 from app.core.config import DATABASE_URL
 from app.utils.logger import log_id_filter, logger
-from app.db.models import Base
 
 
 async_engine = create_async_engine(DATABASE_URL, echo=True)
