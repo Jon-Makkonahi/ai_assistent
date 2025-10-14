@@ -7,8 +7,8 @@ from loguru import logger
 from sqlalchemy.ext.asyncio import (create_async_engine, async_sessionmaker,
                                     AsyncSession)
 
-from app.core.config import DATABASE_URL
-from app.utils.logger import log_id_filter, logger
+from fastapi_api.app.core.config import DATABASE_URL
+from fastapi_api.app.utils.logger import log_id_filter, logger
 
 
 async_engine = create_async_engine(DATABASE_URL, echo=True)

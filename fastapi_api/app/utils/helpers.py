@@ -4,7 +4,7 @@ from uuid import uuid4
 
 from fastapi import HTTPException, status
 
-from app.utils.logger import logger, log_id_filter
+from fastapi_api.app.utils.logger import logger, log_id_filter
 
 
 def service_wrapper(func):

@@ -4,11 +4,11 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.database import get_async_db
-from app.services.users import (create_user_service, get_user_by_id_service,
+from fastapi_api.app.db.database import get_async_db
+from fastapi_api.app.services.users import (create_user_service, get_user_by_id_service,
                                 get_user_by_telegram_id_service, update_user_service,
                                 delete_user_service, get_all_users_service)
-from app.schemas.users import UserCreate, UserResponse
+from fastapi_api.app.schemas.users import UserCreate, UserResponse
 
 
 users_router = APIRouter(prefix="/api/users", tags=["users"])

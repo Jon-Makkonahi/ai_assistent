@@ -1,7 +1,7 @@
 """Celery клиент для отправки задач в ai_worker"""
 from celery import Celery
 
-from app.core.config import REDIS_URL
+from fastapi_api.app.core.config import REDIS_URL
 
 
 celery_app = Celery(

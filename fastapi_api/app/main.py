@@ -8,12 +8,11 @@ from fastapi import FastAPI, APIRouter, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.db.database import init_db, close_db
-from app.api.chat import chat_router, tasks_router, messages_router
-from app.api.users import users_router
-from app.utils.logger import log_id_filter, logger
-from app.core.config import MODEL_NAME
-from common.huggingai_client import HuggingFaceClient
+from fastapi_api.app.db.database import init_db, close_db
+from fastapi_api.app.api.chat import chat_router, tasks_router, messages_router
+from fastapi_api.app.api.users import users_router
+from fastapi_api.app.utils.logger import log_id_filter, logger
+from fastapi_api.app.core.config import MODEL_NAME
 
 
 @asynccontextmanager
@@ -24,10 +23,9 @@ async def lifespan(app: FastAPI):
     try:
         logger.info("Приложение запускается: инициализация ресурсов...")
         await init_db(app)
-        # Инициализация HuggingFaceClient
-        huggingface_client = HuggingFaceClient(model_name=MODEL_NAME, logger=logger)
-        app.state.huggingface_client = huggingface_client
-        logger.info(f"Модель {MODEL_NAME} инициализирована в FastAPI")
+        ml_model = {"name": "gpt", "version": "2.0"}
+        logger.info(f"Модель ML загружена: {ml_model}")
+        app.state.model = ml_model
         yield
     except Exception as e:
         logger.error(f"Ошибка при запуске приложения: {e}")
@@ -35,10 +33,9 @@ async def lifespan(app: FastAPI):
     finally:
         logger.info("Приложение останавливается: очистка ресурсов...")
         await close_db(app)
-        if hasattr(app.state, "huggingface_client"):
-            logger.info("Очистка HuggingFaceClient")
-            app.state.huggingface_client.cleanup()
-            del app.state.huggingface_client
+        if hasattr(app.state, "model"):
+            logger.info("Выгрузка модели ML")
+            app.state.model = None
         logger.info("Ресурсы успешно очищены.")
         log_id_filter.log_id = None
 

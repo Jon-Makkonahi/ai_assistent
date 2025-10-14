@@ -4,9 +4,9 @@ from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from app.db.models import Message
-from app.schemas.messages import MessageResponse
-from app.utils.helpers import service_wrapper
+from fastapi_api.app.db.models import Message
+from fastapi_api.app.schemas.messages import MessageResponse
+from fastapi_api.app.utils.helpers import service_wrapper
 
 
 @service_wrapper

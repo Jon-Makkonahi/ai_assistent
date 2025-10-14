@@ -4,11 +4,11 @@ from uuid import uuid4
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
 
-from app.db.models import Task, TaskStatus, Message, SenderType
-from app.schemas.chat import ChatRequest, ChatResponse
-from app.utils.helpers import service_wrapper
-from app.worker.main import celery_app
-from app.services.users import get_user_by_id_service
+from fastapi_api.app.db.models import Task, TaskStatus, Message, SenderType
+from fastapi_api.app.schemas.chat import ChatRequest, ChatResponse
+from fastapi_api.app.utils.helpers import service_wrapper
+from fastapi_api.app.worker.main import celery_app
+from fastapi_api.app.services.users import get_user_by_id_service
 
 
 @service_wrapper

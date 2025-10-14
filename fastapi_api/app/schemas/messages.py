@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
 
-from app.db.models import SenderType
+from fastapi_api.app.db.models import SenderType
 
 
 class MessageBase(BaseModel):

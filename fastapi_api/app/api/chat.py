@@ -4,13 +4,13 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.database import get_async_db
-from app.services.chat import create_chat_service
-from app.services.tasks import get_task_status_service
-from app.services.messages import get_user_messages_service
-from app.schemas.chat import ChatRequest, ChatResponse
-from app.schemas.tasks import TaskStatusResponse
-from app.schemas.messages import MessageResponse
+from fastapi_api.app.db.database import get_async_db
+from fastapi_api.app.services.chat import create_chat_service
+from fastapi_api.app.services.tasks import get_task_status_service
+from fastapi_api.app.services.messages import get_user_messages_service
+from fastapi_api.app.schemas.chat import ChatRequest, ChatResponse
+from fastapi_api.app.schemas.tasks import TaskStatusResponse
+from fastapi_api.app.schemas.messages import MessageResponse
 
 
 chat_router = APIRouter(prefix="/api", tags=["chat"])

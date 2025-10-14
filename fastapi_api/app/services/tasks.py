@@ -3,9 +3,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from fastapi import HTTPException, status
 
-from app.db.models import Task
-from app.schemas.tasks import TaskStatusResponse
-from app.utils.helpers import service_wrapper
+from fastapi_api.app.db.models import Task
+from fastapi_api.app.schemas.tasks import TaskStatusResponse
+from fastapi_api.app.utils.helpers import service_wrapper
 
 
 @service_wrapper
