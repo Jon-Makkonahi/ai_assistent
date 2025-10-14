@@ -74,4 +74,4 @@ win32_setctime==1.2.0
 zope.event==6.0
 zope.interface==8.0.1
 transformers==4.45.2
-torch==2.4.1
+torch==2.8.0
