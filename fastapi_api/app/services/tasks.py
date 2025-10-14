@@ -1,6 +1,4 @@
 """Сервис для управления задачами"""
-from uuid import uuid4
-
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from fastapi import HTTPException, status

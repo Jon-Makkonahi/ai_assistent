@@ -7,15 +7,13 @@ from fastapi import HTTPException, status
 from app.db.models import Task, TaskStatus, Message, SenderType
 from app.schemas.chat import ChatRequest, ChatResponse
 from app.utils.helpers import service_wrapper
-from app.worker.main import process_ai_task
+from app.worker.main import celery_app
 from app.services.users import get_user_by_id_service
 
 
 @service_wrapper
-async def create_chat_service(request: ChatRequest,
-                              db: AsyncSession) -> ChatResponse:
-    """Создаёт задачу и сообщение от пользователя,
-    отправляет задачу в Celery."""
+async def create_chat_service(request: ChatRequest, db: AsyncSession) -> ChatResponse:
+    """Создаёт задачу и сообщение от пользователя, отправляет задачу в Celery."""
     user = await get_user_by_id_service(request.user_id, db)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -38,9 +36,13 @@ async def create_chat_service(request: ChatRequest,
     db.add(message)
     await db.commit()
     await db.refresh(task)
-    process_ai_task.delay(task_id, request.message)
+    celery_app.send_task(
+        "ai_worker.worker.tasks.ai_tasks.process_ai_task",
+        args=[task_id, request.message]
+    )
     return ChatResponse(
         task_id=task_id,
-        status=TaskStatus.PENDING,
-        message="Задача успешно отправлена"
+        user_id=request.user_id,  # Добавляем user_id в ответ
+        message=request.message,  # Возвращаем сообщение пользователя
+        status=TaskStatus.PENDING
     )
