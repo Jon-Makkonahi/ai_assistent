@@ -4,8 +4,8 @@ from sqlalchemy.future import select
 
 from ai_worker.worker.core.config import REDIS_URL
 from ai_worker.worker.core.huggingai_client import HuggingFaceClient
-from ai_worker.utils.logger import logger, log_id_filter
-from ai_worker.utils.helpers import celery_service_wrapper
+from ai_worker.worker.utils.logger import logger
+from ai_worker.worker.utils.helpers import celery_service_wrapper
 from fastapi_api.app.db.database import async_session_maker
 from fastapi_api.app.db.models import Task, TaskStatus, Message, SenderType
 
@@ -14,7 +14,6 @@ celery_app = Celery(
     broker=REDIS_URL,
     backend=REDIS_URL
 )
-
 celery_app.conf.update(
     task_serializer="json",
     accept_content=["json"],
@@ -23,10 +22,12 @@ celery_app.conf.update(
     enable_utc=True,
 )
 
-@celery_app.task(bind=True, max_retries=3)
+
+@celery_app.task(bind=True, max_retries=3, default_retry_delay=60)
 @celery_service_wrapper
 async def process_ai_task(self, task_id: str, input_data: str):
     """Обрабатывает задачу через AI и обновляет её статус."""
+    client = None
     async with async_session_maker() as db:
         try:
             client = HuggingFaceClient()
@@ -58,4 +59,7 @@ async def process_ai_task(self, task_id: str, input_data: str):
                 task.status = TaskStatus.FAILED
                 task.result = str(e)
                 await db.commit()
-            self.retry(countdown=60)
+            self.retry(exc=e, countdown=60)
+        finally:
+            if client:
+                client.cleanup()

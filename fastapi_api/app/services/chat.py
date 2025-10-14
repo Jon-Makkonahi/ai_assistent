@@ -42,7 +42,7 @@ async def create_chat_service(request: ChatRequest, db: AsyncSession) -> ChatRes
     )
     return ChatResponse(
         task_id=task_id,
-        user_id=request.user_id,  # Добавляем user_id в ответ
-        message=request.message,  # Возвращаем сообщение пользователя
+        user_id=request.user_id,
+        message=request.message,
         status=TaskStatus.PENDING
     )

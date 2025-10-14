@@ -1,9 +1,12 @@
 """Клиент для взаимодействия с локальной моделью Hugging Face"""
-from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
+
+from transformers import AutoModelForCausalLM, AutoTokenizer
 from fastapi import HTTPException, status
-from ai_worker.utils.logger import logger
-from ai_worker.core.config import MODEL_NAME
+
+from ai_worker.worker.core.config import MODEL_NAME
+from ai_worker.worker.utils.logger import logger
+
 
 class HuggingFaceClient:
     def __init__(self):
@@ -44,3 +47,12 @@ class HuggingFaceClient:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Ошибка обработки AI"
             )
+
+    def cleanup(self):
+        """Очищает ресурсы модели."""
+        if hasattr(self, "model"):
+            del self.model
+            del self.tokenizer
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+            logger.info("Ресурсы модели освобождены")
